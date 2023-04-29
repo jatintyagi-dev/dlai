@@ -12,12 +12,6 @@ documentation.
 pip install dlai
 ```
 
-## How to use
+## Please go through the Documentation
 
-Fill me in please! Don’t forget code examples:
-
-``` python
-1+1
-```
-
-    2
+> https://jatintyagi7.github.io/dlai/

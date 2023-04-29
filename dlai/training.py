@@ -9,6 +9,8 @@ from pathlib import Path
 from torch import tensor,nn
 import torch.nn.functional as F
 import fastcore.all as fc
+from functools import partial
+from fastcore.test import test_close
 
 # %% ../nbs/02_mbtraining.ipynb 10
 class dataset():
@@ -42,7 +44,7 @@ loss_func = F.cross_entropy
 # %% ../nbs/02_mbtraining.ipynb 22
 def report(loss, preds, yb,train="training"): print(f' {train} Loss: {loss:.2f}, Accuracy: {accuracy(preds, yb):.2f}')
 
-# %% ../nbs/02_mbtraining.ipynb 35
+# %% ../nbs/02_mbtraining.ipynb 31
 class opt():
     def __init__(self, params , lr=0.5):self.params,self.lr=list(params),lr
     
@@ -57,7 +59,7 @@ class opt():
                 p -= self.lr * p.grad
     
 
-# %% ../nbs/02_mbtraining.ipynb 37
+# %% ../nbs/02_mbtraining.ipynb 33
 def fit(model, epochs=3, lr = 0.2):
     
     o = opt(model.parameters())
@@ -87,5 +89,5 @@ def fit(model, epochs=3, lr = 0.2):
             
         
 
-# %% ../nbs/02_mbtraining.ipynb 42
+# %% ../nbs/02_mbtraining.ipynb 38
 from torch.utils.data import DataLoader, SequentialSampler, RandomSampler, BatchSampler

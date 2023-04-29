@@ -39,10 +39,10 @@ class DL:
 # %% ../nbs/02_mbtraining.ipynb 19
 loss_func = F.cross_entropy
 
-# %% ../nbs/02_mbtraining.ipynb 24
+# %% ../nbs/02_mbtraining.ipynb 22
 def report(loss, preds, yb,train="training"): print(f' {train} Loss: {loss:.2f}, Accuracy: {accuracy(preds, yb):.2f}')
 
-# %% ../nbs/02_mbtraining.ipynb 37
+# %% ../nbs/02_mbtraining.ipynb 35
 class opt():
     def __init__(self, params , lr=0.5):self.params,self.lr=list(params),lr
     
@@ -57,7 +57,7 @@ class opt():
                 p -= self.lr * p.grad
     
 
-# %% ../nbs/02_mbtraining.ipynb 39
+# %% ../nbs/02_mbtraining.ipynb 37
 def fit(model, epochs=3, lr = 0.2):
     
     o = opt(model.parameters())
@@ -87,5 +87,5 @@ def fit(model, epochs=3, lr = 0.2):
             
         
 
-# %% ../nbs/02_mbtraining.ipynb 47
+# %% ../nbs/02_mbtraining.ipynb 42
 from torch.utils.data import DataLoader, SequentialSampler, RandomSampler, BatchSampler

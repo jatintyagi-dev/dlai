@@ -4,7 +4,7 @@
 __all__ = ['def_device', 'DataLoaders', 'inplace', 'collate_dict', 'cb', 'rcb', 'to_device', 'CancelFitException',
            'CancelEpochException', 'CancelBatchException', 'cb_dec', 'learner', 'TrainLearner', 'momentumLearner']
 
-# %% ../nbs/03_learner.ipynb 2
+# %% ../nbs/03_learner.ipynb 3
 import math,torch,matplotlib.pyplot as plt
 import fastcore.all as fc
 from collections.abc import Mapping
@@ -21,7 +21,7 @@ from torch.utils.data import default_collate
 from fastprogress import progress_bar,master_bar
 from operator import itemgetter
 
-# %% ../nbs/03_learner.ipynb 9
+# %% ../nbs/03_learner.ipynb 10
 class DataLoaders:
     def __init__(self, *dls): self.train,self.valid = dls[:2]
 
@@ -30,32 +30,32 @@ class DataLoaders:
         f = collate_dict(dd['train'])
         return cls(*get_dls(*dd.values(), bs=batch_size, collate_fn=f, **kwargs))
 
-# %% ../nbs/03_learner.ipynb 12
+# %% ../nbs/03_learner.ipynb 13
 def inplace(f):
     def _f(b):
         f(b)
         return b
     return _f
 
-# %% ../nbs/03_learner.ipynb 13
+# %% ../nbs/03_learner.ipynb 14
 def collate_dict(ds):
     get = itemgetter(*ds.features)
     def _f(b): return get(default_collate(b))
     return _f
 
-# %% ../nbs/03_learner.ipynb 21
+# %% ../nbs/03_learner.ipynb 22
 class cb:
     order = 0
         
 
-# %% ../nbs/03_learner.ipynb 27
+# %% ../nbs/03_learner.ipynb 28
 def rcb(cbs, method_name, learn):
     for cb in sorted(cbs, key= attrgetter("order")):
         method =  getattr(cb, method_name, None )
         if method : return method(learn)
         
 
-# %% ../nbs/03_learner.ipynb 30
+# %% ../nbs/03_learner.ipynb 31
 def_device = 'mps' if torch.backends.mps.is_available() else 'cuda' if torch.cuda.is_available() else 'cpu'
 
 def to_device(x, device=def_device):
@@ -63,12 +63,12 @@ def to_device(x, device=def_device):
     if isinstance(x, Mapping): return {k:v.to(device) for k,v in x.items()}
     return type(x)(to_device(o, device) for o in x)
 
-# %% ../nbs/03_learner.ipynb 43
+# %% ../nbs/03_learner.ipynb 44
 class CancelFitException:pass
 class CancelEpochException:pass
 class CancelBatchException:pass
 
-# %% ../nbs/03_learner.ipynb 45
+# %% ../nbs/03_learner.ipynb 46
 class cb_dec:
     def __init__(self, name):
         fc.store_attr()
@@ -84,7 +84,7 @@ class cb_dec:
             
             
 
-# %% ../nbs/03_learner.ipynb 46
+# %% ../nbs/03_learner.ipynb 47
 class learner:
     
     def __init__(self, model, dls,loss_func, lr,cbs=[] ,opt_func=optim.SGD):fc.store_attr()
@@ -125,7 +125,7 @@ class learner:
     def callback(self, nm): rcb(self.cbs, nm, self)
         
 
-# %% ../nbs/03_learner.ipynb 51
+# %% ../nbs/03_learner.ipynb 52
 class TrainLearner(learner):
     def predict(self): self.preds = self.model(self.batch[0])
     def get_loss(self): self.loss = self.loss_func(self.preds, self.batch[1])
@@ -133,7 +133,7 @@ class TrainLearner(learner):
     def step(self): self.opt.step()
     def zero_grad(self): self.opt.zero_grad()
 
-# %% ../nbs/03_learner.ipynb 54
+# %% ../nbs/03_learner.ipynb 55
 class momentumLearner(learner):
     def __init__(self, model, dls, loss_func, lr=None, cbs=None, opt_func=optim.SGD, mom=0.85):
         self.mom = mom

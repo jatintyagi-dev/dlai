@@ -55,7 +55,7 @@ def rcb(cbs, method_name, learn):
         if method : return method(learn)
         
 
-# %% ../nbs/03_learner.ipynb 31
+# %% ../nbs/03_learner.ipynb 30
 def_device = 'mps' if torch.backends.mps.is_available() else 'cuda' if torch.cuda.is_available() else 'cpu'
 
 def to_device(x, device=def_device):
@@ -63,12 +63,12 @@ def to_device(x, device=def_device):
     if isinstance(x, Mapping): return {k:v.to(device) for k,v in x.items()}
     return type(x)(to_device(o, device) for o in x)
 
-# %% ../nbs/03_learner.ipynb 44
+# %% ../nbs/03_learner.ipynb 43
 class CancelFitException:pass
 class CancelEpochException:pass
 class CancelBatchException:pass
 
-# %% ../nbs/03_learner.ipynb 46
+# %% ../nbs/03_learner.ipynb 45
 class cb_dec:
     def __init__(self, name):
         fc.store_attr()
@@ -84,7 +84,7 @@ class cb_dec:
             
             
 
-# %% ../nbs/03_learner.ipynb 47
+# %% ../nbs/03_learner.ipynb 46
 class learner:
     
     def __init__(self, model, dls,loss_func, lr,cbs=[] ,opt_func=optim.SGD):fc.store_attr()
@@ -125,7 +125,7 @@ class learner:
     def callback(self, nm): rcb(self.cbs, nm, self)
         
 
-# %% ../nbs/03_learner.ipynb 52
+# %% ../nbs/03_learner.ipynb 51
 class TrainLearner(learner):
     def predict(self): self.preds = self.model(self.batch[0])
     def get_loss(self): self.loss = self.loss_func(self.preds, self.batch[1])
@@ -133,7 +133,7 @@ class TrainLearner(learner):
     def step(self): self.opt.step()
     def zero_grad(self): self.opt.zero_grad()
 
-# %% ../nbs/03_learner.ipynb 55
+# %% ../nbs/03_learner.ipynb 54
 class momentumLearner(learner):
     def __init__(self, model, dls, loss_func, lr=None, cbs=None, opt_func=optim.SGD, mom=0.85):
         self.mom = mom

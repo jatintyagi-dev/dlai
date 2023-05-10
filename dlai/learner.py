@@ -4,7 +4,7 @@
 __all__ = ['def_device', 'DataLoaders', 'inplace', 'collate_dict', 'cb', 'rcb', 'to_device', 'CancelFitException',
            'CancelEpochException', 'CancelBatchException', 'cb_dec', 'learner', 'TrainLearner', 'momentumLearner']
 
-# %% ../nbs/03_learner.ipynb 2
+# %% ../nbs/03_learner.ipynb 3
 import math,torch,matplotlib.pyplot as plt
 import fastcore.all as fc
 from collections.abc import Mapping
@@ -21,7 +21,7 @@ from torch.utils.data import default_collate
 from fastprogress import progress_bar,master_bar
 from operator import itemgetter
 
-# %% ../nbs/03_learner.ipynb 9
+# %% ../nbs/03_learner.ipynb 10
 class DataLoaders:
     def __init__(self, *dls): self.train,self.valid = dls[:2]
 
@@ -30,25 +30,25 @@ class DataLoaders:
         f = collate_dict(dd['train'])
         return cls(*get_dls(*dd.values(), bs=batch_size, collate_fn=f, **kwargs))
 
-# %% ../nbs/03_learner.ipynb 12
+# %% ../nbs/03_learner.ipynb 13
 def inplace(f):
     def _f(b):
         f(b)
         return b
     return _f
 
-# %% ../nbs/03_learner.ipynb 13
+# %% ../nbs/03_learner.ipynb 14
 def collate_dict(ds):
     get = itemgetter(*ds.features)
     def _f(b): return get(default_collate(b))
     return _f
 
-# %% ../nbs/03_learner.ipynb 21
+# %% ../nbs/03_learner.ipynb 22
 class cb:
     order = 0
         
 
-# %% ../nbs/03_learner.ipynb 27
+# %% ../nbs/03_learner.ipynb 28
 def rcb(cbs, method_name, learn):
     for cb in sorted(cbs, key= attrgetter("order")):
         method =  getattr(cb, method_name, None )

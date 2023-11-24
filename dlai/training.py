@@ -86,6 +86,9 @@ def fit(model, epochs=3, lr = 0.2):
                 
 #         print(preds.shape)
         report(loss, preds, yb, "validation ")
+    
+    
+    #adding to test
             
         
 
